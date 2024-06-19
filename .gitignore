@@ -8,6 +8,12 @@
 # testing
 /coverage
 
+#API key
+.env
+
+#test
+/src/kuma.jpg
+
 # production
 /build
 
@@ -22,5 +28,3 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-##API key
-.env
