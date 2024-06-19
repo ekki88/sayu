@@ -11,9 +11,6 @@
 #API key
 .env
 
-#test
-/src/kuma.jpg
-
 # production
 /build
 
