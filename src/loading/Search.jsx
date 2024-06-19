@@ -1,10 +1,32 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
+import Map from "./Map";
+import axios from "axios";
+
 
 const Search = () => {
+    const [data, setData] = useState();
+    const api_key = process.env.REACT_APP_API_KEY;
+
+    useEffect(()=>{
+        async function getData(){
+            try{
+                const response = await axios.get(`https://dapi.kakao.com/v2/local/search/keyword.${FORMAT}`)
+                const result = response.data
+                // console.log(result.culturalEventInfo.row)
+                setData(result)
+            }
+            catch(e) {
+                console.log(e)
+            }
+        }
+        getData()
+    },[])
     return (
         <S.container>
-            <S.map>지도</S.map>
+            <S.map>
+                <Map/>
+            </S.map>
             <S.keywordBox>
                 <S.keyword>
                     <div>미술관</div>

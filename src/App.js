@@ -4,15 +4,17 @@ import Main from "./loading/Main";
 import Search from "./loading/Search";
 import Page from "./loading/Page";
 import DetailedPage from "./loading/DetailedPage";
+import Map from "./loading/Map";
 
 function App() {
   return (
     <div className="App">
         {/*<Loading/>*/}
         {/*<Main/>*/}
-        {/*<Search/>*/}
+        <Search/>
+        {/*<Map/>*/}
         {/*<Page/>*/}
-        <DetailedPage/>
+        {/*<DetailedPage/>*/}
     </div>
   );
 }

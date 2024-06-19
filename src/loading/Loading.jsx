@@ -21,7 +21,8 @@ const Loading = () => {
                 <img src={img02} alt='Poster'/>
             </ImgBox>
             <ImgBox>
-            <img src={img01} alt='Poster'/>
+
+                <img src={img01} alt='Poster'/>
                 <img src={img02} alt='Poster'/>
                 <img src={img03} alt='Poster'/>
                 <img src={img04} alt='Poster'/>
