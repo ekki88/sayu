@@ -86,10 +86,6 @@ S.container = styled.div`
 `
 
 S.map = styled.div`
-    width: 500px;
-    height: 500px;
-    background-color: #282c34;
-    margin: 20px;
 `
 S.keywordBox = styled.div`
     width: 400px;
@@ -97,11 +93,17 @@ S.keywordBox = styled.div`
     display: flex;
     flex-direction: column;
     border: #282c34 1px solid;
+    margin: 0 10px;
 `
 S.keyword = styled.div`
     display: flex;
     justify-content: flex-start;
     margin: 5px;
+    div{
+        font-size: 20px;
+        font-weight: bold;
+        margin: 0 10px;
+    }
 `
 S.list = styled.ul`
     display: flex;
