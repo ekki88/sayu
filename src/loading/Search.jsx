@@ -6,22 +6,44 @@ import axios from "axios";
 
 const Search = () => {
     const [data, setData] = useState();
-    const api_key = process.env.REACT_APP_API_KEY;
+    const api_key = process.env.REACT_APP_KAKAOREST_API_KEY;
 
     useEffect(()=>{
-        async function getData(){
-            try{
-                const response = await axios.get(`https://dapi.kakao.com/v2/local/search/keyword.${FORMAT}`)
-                const result = response.data
-                // console.log(result.culturalEventInfo.row)
-                setData(result)
-            }
-            catch(e) {
-                console.log(e)
-            }
-        }
-        getData()
+        const getSearchWord = async () => {
+            const response =  await fetch(
+                `https://dapi.kakao.com/v2/local/search/keyword?query=${"미술관"}`,
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization: `KakaoAK ${api_key}`,
+                    },
+                }
+            );
+            const json = await response.json();
+            console.log(json);
+            console.log(json?.documents.slice(0, 6));
+
+            setData(json?.documents?.slice(0, 6));
+        };
+        getSearchWord();
     },[])
+
+
+    //
+    // useEffect(()=>{
+    //     async function getData(){
+    //         try{
+    //             const response = await axios.get(`https://dapi.kakao.com/v2/local/search/keyword.${query}`)
+    //             const result = response.data
+    //             // console.log(result.culturalEventInfo.row)
+    //             setData(result)
+    //         }
+    //         catch(e) {
+    //             console.log(e)
+    //         }
+    //     }
+    //     getData()
+    // },[])
     return (
         <S.container>
             <S.map>
@@ -33,16 +55,14 @@ const Search = () => {
                     <div>|</div>
                     <div>박물관</div>
                 </S.keyword>
-                <S.list>
-                    <li>서울시립미술관</li>
-                    <li>서울공예박물관</li>
-                    <li>국립현대미술관</li>
-                    <li>서울역사박물관</li>
-                    <li>서울시립미술관</li>
-                    <li>서울공예박물관</li>
-                    <li>국립현대미술관</li>
-                    <li>서울역사박물관</li>
-                </S.list>
+                {data && data.map((item)=>{
+                    return(
+                        <S.list key={item.id}>
+                            <li>{item.place_name}</li>
+                        </S.list>
+                    )
+                })}
+
                 <S.number>
                     <div>1</div>
                     <div>2</div>

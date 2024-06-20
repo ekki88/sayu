@@ -1,5 +1,8 @@
 /*global kakao */
 import {useRef,useEffect} from "react";
+import styled from "styled-components";
+
+
 function Map(){
     const container = useRef(null)
     const options=
@@ -13,9 +16,18 @@ function Map(){
 
 
     return(
-        <div id="map" ref={container} style={{ width:'35vw', height:'70vh' }}>
-        </div>
+        <>
+            <S.map ref={container}/>
+        </>
     )
 }
 
 export default Map;
+
+const S ={};
+
+S.map = styled.div`
+    width: 35vw;
+    height: 70vh;
+    
+`
