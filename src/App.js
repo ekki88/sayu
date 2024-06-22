@@ -10,8 +10,8 @@ function App() {
   return (
     <div className="App">
         {/*<Loading/>*/}
-        {/*<Main/>*/}
-        <Search/>
+        <Main/>
+        {/*<Search/>*/}
         {/*<Map/>*/}
         {/*<Page/>*/}
         {/*<DetailedPage/>*/}

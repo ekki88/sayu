@@ -11,7 +11,7 @@ const Search = () => {
     useEffect(()=>{
         const getSearchWord = async () => {
             const response =  await fetch(
-                `https://dapi.kakao.com/v2/local/search/keyword?query=${"미술관"}`,
+                `https://dapi.kakao.com/v2/local/search/keyword?query=미술관&rect=126.963,37.564,127.019,37.602`,
                 {
                     method: "GET",
                     headers: {
@@ -21,9 +21,9 @@ const Search = () => {
             );
             const json = await response.json();
             console.log(json);
-            console.log(json?.documents.slice(0, 6));
+            // console.log(json?.documents.slice(0, 6));
 
-            setData(json?.documents?.slice(0, 6));
+            setData(json);
         };
         getSearchWord();
     },[])
@@ -55,7 +55,7 @@ const Search = () => {
                     <div>|</div>
                     <div>박물관</div>
                 </S.keyword>
-                {data && data.map((item)=>{
+                {data && data.documents.map((item)=>{
                     return(
                         <S.list key={item.id}>
                             <li>{item.place_name}</li>
