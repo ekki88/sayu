@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import styled from "styled-components";
-import Pagination from 'react-js-pagination'
 import ReactPaginate from "react-paginate";
+import Header from "./Header";
 
 
 const Main = () => {
@@ -46,71 +46,81 @@ const Main = () => {
         console.log('장소 상세페이지 , 카카오 ')
     }
     return (
-        <Container>
-            <div>
-                <b> SAYU : 사대문 안에서 뭘 하지?  </b>
-            </div>
-            <List>
-                {currentPageData.map((item, index) => (
-                    <Box key={index}>
-                        <Img src={item.MAIN_IMG} alt="poster" onClick={onClick}/>
-                        <Title onClick={onClick}>{item.TITLE}</Title>
-                        <Place onClick={onClickPlace}>{item.PLACE}</Place>
-                    </Box>
+        <S.container>
+            <Header/>
+            <S.list>
+                {currentPageData.map((item) => (
+                    <S.box key={item.TITLE}>
+                        <S.img src={item.MAIN_IMG} alt="poster" onClick={onClick}/>
+                        <S.title onClick={onClick}>{item.TITLE}</S.title>
+                        <S.place onClick={onClickPlace}>{item.PLACE}</S.place>
+                    </S.box>
                 ))}
-            </List>
-            <PaginationBox>
+            </S.list>
+            <S.paginationBox>
                 <ReactPaginate
                     previousLabel={"이전"}
                     nextLabel={"다음"}
                     breakLabel={"..."}
-                    pageCount={Math.ceil( itemsPerPage)}
+                    pageCount={Math.ceil(itemsPerPage)}
                     marginPagesDisplayed={2}
                     pageRangeDisplayed={5}
                     onPageChange={handlePageClick}
                     containerClassName={"pagination"}
                     activeClassName={"active"}
                 />
-            </PaginationBox>
-        </Container>
+            </S.paginationBox>
+        </S.container>
 
     );
 };
 
 export default Main;
 
-
-const Container = styled.div`
+const S = {};
+S.container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 100vw;
+    width: 100%;
     height: 100%;
     place-items: center;
 `
-const List = styled.div`
+S.header = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    div{
+        p{
+            display: flex;
+            justify-content: center;
+            align-content: center;
+        }
+    }
+`
+S.list = styled.div`
     display: grid;
     grid-template-columns: 0.5fr 0.5fr 0.5fr ;
     width: 1000px;
     height: 100%;
 `
 
-const Img = styled.img`
+S.img = styled.img`
     width: 300px;
     height: 450px;
 `
-const Title = styled.p`
+S.title = styled.p`
     font-weight: bold;
     word-break: keep-all;
 `
-const Place = styled.p`
+S.place = styled.p`
     color: dimgrey;
     word-break: keep-all;
 `
-const Box =styled.div`
+S.box =styled.div`
     margin: 10px;
 `
-const PaginationBox = styled.div`
+S.paginationBox = styled.div`
     display: flex;
     justify-content: center; 
     margin-top: 15px;
