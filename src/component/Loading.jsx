@@ -38,7 +38,7 @@ const Loading = () => {
                 <img src={img14} alt='Poster'/>
                 <img src={img08} alt='Poster'/>
             </S.imgBox>
-            <S.imgBox>
+            <S.imgBoxRight>
                 <img src={img15} alt='Poster'/>
                 <img src={img09} alt='Poster'/>
                 <img src={img12} alt='Poster'/>
@@ -50,7 +50,7 @@ const Loading = () => {
                 <img src={img05} alt='Poster'/>
                 <img src={img13} alt='Poster'/>
                 <img src={img03} alt='Poster'/>
-            </S.imgBox>
+            </S.imgBoxRight>
             <S.imgBox>
                 <img src={img05} alt='Poster'/>
                 <img src={img06} alt='Poster'/>
@@ -89,7 +89,32 @@ S.imgBox = styled.div`
         }
 
         to {
-            margin-left: 0%;
+            margin-left: 0;
+            width: 100%;
+        }
+    }
+`
+
+S.imgBoxRight = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    animation-duration: 3s;
+    animation-name: slideRight;
+    img {
+        width: 33vw;
+        height: 33vh;
+    }
+    @keyframes slideRight {
+        from {
+            margin-right: 100%;;
+            width: 300%;
+        }
+
+        to {
+            margin-right: 0;
             width: 100%;
         }
     }

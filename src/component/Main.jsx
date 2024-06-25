@@ -2,12 +2,16 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
-import Header from "./Header";
-
+import {useNavigate} from "react-router-dom";
+import DetailedPage from "./DetailedPage";
 
 const Main = () => {
-    const [data, setData] = useState();
+    const [data, setData] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
+    const [keyword, setKeyWord] = useState('전시');
+    const [selectedTitle, setSelectedTitle] = useState('');
+    const [modal, setModal] = useState(false);
+    const navigate = useNavigate();
     const itemsPerPage = 6;
     const api_key = process.env.REACT_APP_API_KEY;
     const today = new Date()
@@ -19,7 +23,7 @@ const Main = () => {
     useEffect(()=>{
         async function getData(){
             try{
-                const response = await axios.get(`http://openapi.seoul.go.kr:8088/${api_key}/json/culturalEventInfo/1/1000/전시/ `)
+                const response = await axios.get(`http://openapi.seoul.go.kr:8088/${api_key}/json/culturalEventInfo/1/1000/${keyword}/ `)
                 const result = response.data
                 const filteredData = result.culturalEventInfo.row.filter(
                     item => item.GUNAME === "종로구" && item.STRTDATE <= time && item.END_DATE >= time
@@ -31,44 +35,75 @@ const Main = () => {
             }
         }
         getData()
-    },[])
+    },[time, keyword])
+
 
     const handlePageClick = (event) => {
         setCurrentPage(event.selected);
     };
-
     const offset = currentPage * itemsPerPage;
     const currentPageData = Array.isArray(data) ? data.slice(offset, offset + itemsPerPage) : [];
-    const onClick = () =>{
-        console.log('전시 상세페이지로 ')
+
+    const handleClickKeyword = (keyword) =>{
+        setKeyWord(keyword);
     }
+    const onClickLogin = () => {
+        navigate("/login");
+    }
+
+    const onClickDetail = (title) => {
+        setSelectedTitle(title);
+        console.log('title',title)
+        setModal(true);
+
+    };
+
+    console.log("333333333",selectedTitle)
+    const closeModal = () => {
+        setModal(false);
+        setSelectedTitle('');
+    };
     const onClickPlace = () => {
         console.log('장소 상세페이지 , 카카오 ')
     }
     return (
         <S.container>
-            <Header/>
+            <S.header>
+                <S.menu>
+                    <h1>SAYU</h1>
+                    <button onClick={()=>handleClickKeyword('전시')}>전시</button>
+                    <button onClick={()=>handleClickKeyword('뮤지컬')}>공연</button>
+                    <button onClick={()=>handleClickKeyword('축제')}>축제</button>
+                </S.menu>
+                <button onClick={onClickLogin}>로그인 </button>
+            </S.header>
             <S.list>
                 {currentPageData.map((item) => (
                     <S.box key={item.TITLE}>
-                        <S.img src={item.MAIN_IMG} alt="poster" onClick={onClick}/>
-                        <S.title onClick={onClick}>{item.TITLE}</S.title>
+                        <S.img src={item.MAIN_IMG} alt="poster" onClick={()=>onClickDetail(item.TITLE)}/>
+                        <S.title onClick={()=>{
+                            console.log("111111111111",selectedTitle)
+                            onClickDetail(item.TITLE)}
+                        }>{item.TITLE}</S.title>
                         <S.place onClick={onClickPlace}>{item.PLACE}</S.place>
                     </S.box>
                 ))}
             </S.list>
+            {modal === true ? <DetailedPage keyword={keyword} title={selectedTitle} modal={modal} setModal={setModal}/>:null}
             <S.paginationBox>
-                <ReactPaginate
-                    previousLabel={"이전"}
-                    nextLabel={"다음"}
-                    breakLabel={"..."}
-                    pageCount={Math.ceil(itemsPerPage)}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={handlePageClick}
-                    containerClassName={"pagination"}
-                    activeClassName={"active"}
-                />
+                {data.length > 0 && (
+                    <ReactPaginate
+                        previousLabel={"이전"}
+                        nextLabel={"다음"}
+                        breakLabel={"..."}
+                        pageCount={Math.ceil(data.length / itemsPerPage)}
+                        marginPagesDisplayed={2}
+                        pageRangeDisplayed={5}
+                        onPageChange={handlePageClick}
+                        containerClassName={"pagination"}
+                        activeClassName={"active"}
+                    />
+                )}
             </S.paginationBox>
         </S.container>
 
@@ -78,6 +113,7 @@ const Main = () => {
 export default Main;
 
 const S = {};
+
 S.container = styled.div`
     display: flex;
     flex-direction: column;
@@ -87,17 +123,34 @@ S.container = styled.div`
     place-items: center;
 `
 S.header = styled.div`
+    width: 100%;
+    height: 70px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    button{
+        border: 0;
+        background-color: transparent;
+        font-weight: bold;
+        font-size: 14px;
+    }
+`
+S.menu = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    div{
-        p{
-            display: flex;
-            justify-content: center;
-            align-content: center;
-        }
+    h1{
+        margin-right: 30px;
+    }
+    button{
+        margin: 20px;
+        border: 0;
+        background-color: transparent;
+        font-size: 14px;
+        font-weight: normal;
     }
 `
+
 S.list = styled.div`
     display: grid;
     grid-template-columns: 0.5fr 0.5fr 0.5fr ;
@@ -135,5 +188,6 @@ S.paginationBox = styled.div`
     justify-content: center;
     align-items: center;
     font-size: 1rem;
+    cursor: pointer;
   }
   `
