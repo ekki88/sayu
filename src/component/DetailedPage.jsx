@@ -1,21 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import axios from "axios";
-import closeIcon from "../img/icons/close.svg";
-import close01 from "../img/icons/close01.svg";
-import heart from "../img/icons/heart.svg";
-import heart01 from "../img/icons/heart01.svg";
-// import heart02 from "../img/icons/heart02.svg";
-import heart03 from "../img/icons/heart03.svg";
-import heart04 from "../img/icons/heart04.svg";
+import bookmark from "../img/icons/bookmark.svg";
+import bookmarkFill from "../img/icons/bookmarkFill.svg";
+import close from "../img/icons/close_s.svg";
 
 
 const DetailedPage = (props) => {
-    const {keyword, selectedTitle, modal, setModal} = props;
+    const {keyword, selectedTitle, setModal} = props;
     const [item, setItem] = useState(null);
     const api_key = process.env.REACT_APP_API_KEY;
-    console.log('selectedTitle',selectedTitle)
-    console.log('keyword',keyword)
+
+
     useEffect(() => {
             async function fetchData() {
                 try {
@@ -30,32 +26,34 @@ const DetailedPage = (props) => {
     }, [selectedTitle]);
 
     const onClickClose = () =>{
-        console.log("닫음")
         setModal(false)
     }
 
     return (
-        <S.Modal>
-            <S.container>
-                <button>
-                    <img src={heart} alt='icon'/>
-                </button>
-                <S.DataBox>
-                    {/*<S.img src={item.MAIN_IMG} alt='poster'></S.img>*/}
-                    {/*<S.list>*/}
-                    {/*    <h3>{item.TITLE}</h3>*/}
-                    {/*    <li>{item.DATE}</li>*/}
-                    {/*    <li>{item.IS_FREE}{item.FEE}</li>*/}
-                    {/*    <li>{item.ORG_NAME}{item.PLACE}</li>*/}
-                    {/*    <li>가는 길 </li>*/}
-                    {/*    <li>{item.ORG_LINK}</li>*/}
-                    {/*</S.list>*/}
-                </S.DataBox>
-                <button onClick={onClickClose}>
-                    <img src={closeIcon} alt='closeIcon'/>
-                </button>
-            </S.container>
-        </S.Modal>
+        <>
+            {item &&
+                <S.Modal>
+                    <S.container>
+                        <S.button>
+                            <img src={bookmark} alt='icon'/>
+                            <img src={close} alt='closeIcon' onClick={onClickClose}/>
+                        </S.button>
+                        <S.dataBox>
+                            <S.img src={item.MAIN_IMG} alt='poster'></S.img>
+                            <S.list>
+                                <h3>{item.TITLE}</h3>
+                                <li>{item.DATE}</li>
+                                <li>{item.IS_FREE}{item.FEE}</li>
+                                <li>{item.ORG_NAME}{item.PLACE}</li>
+                                <li>가는 길 </li>
+                                <a href={item.ORG_LINK} target="_blank"/>
+                            </S.list>
+                        </S.dataBox>
+
+                    </S.container>
+                </S.Modal>
+            }
+        </>
     );
 };
 
@@ -71,35 +69,40 @@ S.Modal = styled.div`
     left :0;
     z-index : 100;
     background-color : rgba(0,0,0,0.2);
-    border: darkgreen solid 1px;
-    button{
-        border: 0;
-        background-color: transparent;
-        font-weight: bold;
-        font-size: 14px;
-        img{
-            width: 50px;
-            height: 50px;
-        }
-    }
 `
 S.container = styled.div`
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 50%;
+    width: 60%;
     height: 500px;
     transform: translate(-50%, -50%);
     display :flex;
-    justify-content:center;
-    align-items :center;
+    flex-direction: column;
+    align-items: flex-start;
     background-color: #ffff;
 `
-S.DataBox = styled.div`
-    width: 700px;
+S.button = styled.button`
+    border: 0;
+    background-color: transparent;
+    font-weight: bold;
+    font-size: 14px;
+    width: 100%;
     display: flex;
-    justify-content: center;
-    margin-top: 30px;
+    justify-content: space-between;
+    img{
+        width: 35px;
+        height: 35px;
+        margin: 10px 10px 0 10px;
+        &:first-child{
+            fill: red;
+        }
+    }
+`
+S.dataBox = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
     background-color: #ffff;
 `
 S.img = styled.img`
@@ -111,9 +114,15 @@ S.img = styled.img`
 S.list = styled.ul`
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
     align-items: flex-start;
     padding: 0;
+    word-break: keep-all;
+    h3{
+        text-align: start;
+    }
     li{
+        text-align: start;
         list-style: none;
         margin: 3px;
     }

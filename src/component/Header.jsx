@@ -1,30 +1,34 @@
-import React, {useState} from 'react';
-import {useNavigate} from "react-router-dom";
+import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
-import Map from "./Map";
 import Main from "./Main";
+import loginIcon from "../img/icons/kakao_login.png";
+
 
 const Header = () => {
     const [keyword, setKeyWord] = useState('전시')
-    const navigate = useNavigate();
+    const login_key = process.env.REACT_APP_KAKAOREST_API_KEY;
+    const redirect_url = process.env.REACT_APP_REDIRECT_URI;
+    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${login_key}&redirect_uri=${redirect_url}&response_type=code`
 
-    const handleKeywordClick = (keyword) =>{
+    const handleClickKeyword = (keyword) =>{
         setKeyWord(keyword);
-        console.log('확인',keyword)
     }
-    function onClickLogin () {
-        navigate("/login");
+    const onClickLogin = () => {
+        window.location.href = KAKAO_AUTH_URL;
     }
+    useEffect(()=>{
+
+    },[])
     return (
         <S.container>
             <S.header>
                 <S.menu>
                     <h1>SAYU</h1>
-                    <button onClick={()=>handleKeywordClick('전시')}>전시</button>
-                    <button onClick={()=>handleKeywordClick('뮤지컬')}>공연</button>
-                    <button onClick={()=>handleKeywordClick('축제')}>축제</button>
+                    <button onClick={()=>handleClickKeyword('전시')}>전시</button>
+                    <button onClick={()=>handleClickKeyword('뮤지컬')}>공연</button>
+                    <button onClick={()=>handleClickKeyword('축제')}>축제</button>
                 </S.menu>
-                <button onClick={onClickLogin}>로그인 </button>
+                <img src={loginIcon} onClick={onClickLogin} alt="icon"/>
             </S.header>
             <Main keyword={keyword}/>
         </S.container>
@@ -68,6 +72,6 @@ S.menu = styled.div`
         border: 0;
         background-color: transparent;
         font-size: 14px;
-        font-weight: normal;
+        font-weight: bold;
     }
 `

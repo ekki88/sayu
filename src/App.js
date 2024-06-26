@@ -13,13 +13,8 @@ function App() {
     <div className="App">
         <Routes>
             <Route path="/" element={<Loading/>}/>
-            <Route path="/main" element={<Main/>}/>
-            <Route path="/login" element={<Login/>}/>
-            <Route path="detail/:title" element={<DetailedPage/>}/>
+            <Route path="/main" element={<Header/>}/>
         </Routes>
-        {/*/!*<Search/>*!/*/}
-        {/*/!*<Map/>*!/*/}
-
     </div>
   );
 }

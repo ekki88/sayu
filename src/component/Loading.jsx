@@ -26,7 +26,7 @@ const Loading = () => {
     }
     return (
         <Link to='/main'>
-            <S.imgBox onClick={onClick}>
+            <S.imgBox>
                 <img src={img01} alt='Poster'/>
                 <img src={img02} alt='Poster'/>
                 <img src={img03} alt='Poster'/>
@@ -39,7 +39,6 @@ const Loading = () => {
                 <img src={img08} alt='Poster'/>
             </S.imgBox>
             <S.imgBoxRight>
-                <img src={img15} alt='Poster'/>
                 <img src={img09} alt='Poster'/>
                 <img src={img12} alt='Poster'/>
                 <img src={img14} alt='Poster'/>
@@ -49,7 +48,6 @@ const Loading = () => {
                 <img src={img07} alt='Poster'/>
                 <img src={img05} alt='Poster'/>
                 <img src={img13} alt='Poster'/>
-                <img src={img03} alt='Poster'/>
             </S.imgBoxRight>
             <S.imgBox>
                 <img src={img05} alt='Poster'/>
@@ -73,6 +71,7 @@ const S = {};
 
 S.imgBox = styled.div`
     display: flex;
+    justify-content: flex-end;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -97,7 +96,7 @@ S.imgBox = styled.div`
 
 S.imgBoxRight = styled.div`
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -109,12 +108,12 @@ S.imgBoxRight = styled.div`
     }
     @keyframes slideRight {
         from {
-            margin-right: 100%;;
+            margin-left: 0%;
             width: 300%;
         }
 
         to {
-            margin-right: 0;
+            margin-left: 100%;
             width: 100%;
         }
     }
