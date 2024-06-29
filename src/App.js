@@ -5,6 +5,7 @@ import Header from "./component/Header";
 import React from "react";
 import Bookmark from "./component/Bookmark";
 import KakaoCallback from "./component/KakaoCallback";
+import KakaoMap from "./component/KakaoMap";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
               <Route path="/" element={<Loading/>}/>
               <Route path="/main/*" element={<Header/>}/>
               <Route path="/OAuth" element={<KakaoCallback/>}/>
+              <Route path="/map/:lat/:lng" element={<KakaoMap/>}/>
           </Routes>
       </div>
   );

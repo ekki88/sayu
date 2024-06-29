@@ -108,12 +108,12 @@ S.imgBoxRight = styled.div`
     }
     @keyframes slideRight {
         from {
-            margin-left: 0%;
+            margin-left: -100%;
             width: 300%;
         }
 
         to {
-            margin-left: 100%;
+            margin-left: 0;
             width: 100%;
         }
     }

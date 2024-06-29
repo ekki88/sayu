@@ -4,9 +4,12 @@ import axios from "axios";
 import bookmark from "../img/icons/bookmark.svg";
 import bookmarkFill from "../img/icons/bookmarkFill.svg";
 import close from "../img/icons/close_s.svg";
+import KakaoMap from "./KakaoMap";
+import {Link, Route, Routes, useNavigate} from "react-router-dom";
 
 
 const DetailedPage = (props) => {
+    const navigate = useNavigate();
     const {keyword, selectedTitle, setModal} = props;
     const [item, setItem] = useState(null);
     const api_key = process.env.REACT_APP_API_KEY;
@@ -44,15 +47,20 @@ const DetailedPage = (props) => {
                                 <h3>{item.TITLE}</h3>
                                 <li>{item.DATE}</li>
                                 <li>{item.IS_FREE}{item.FEE}</li>
-                                <li>{item.ORG_NAME}{item.PLACE}</li>
-                                <li>가는 길 </li>
-                                <a href={item.ORG_LINK} target="_blank"/>
+                                {item.ORG_NAME == "기타" ? <li>{item.PLACE}</li> : <li>{item.ORG_NAME}{item.PLACE}</li>}
+                                <li onClick={() => {
+                                    navigate(`/map/${item.LOT}/${item.LAT}`)
+                                }}>지도
+                                </li>
+                                <a href={item.ORG_LINK} target="_blank">예약하기 ></a>
                             </S.list>
                         </S.dataBox>
-
                     </S.container>
                 </S.Modal>
             }
+            <Routes>
+
+            </Routes>
         </>
     );
 };
@@ -81,6 +89,7 @@ S.container = styled.div`
     flex-direction: column;
     align-items: flex-start;
     background-color: #ffff;
+    padding: 0 10px;
 `
 S.button = styled.button`
     border: 0;
@@ -118,12 +127,20 @@ S.list = styled.ul`
     align-items: flex-start;
     padding: 0;
     word-break: keep-all;
+    text-align: start;
     h3{
         text-align: start;
     }
     li{
         text-align: start;
         list-style: none;
+        margin: 3px;
+    }
+    a{
+        text-decoration: none;
+        color: black;
+        font-weight: bold;
+        font-size: 14px;
         margin: 3px;
     }
 `

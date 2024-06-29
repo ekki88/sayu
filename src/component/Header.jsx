@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext, createContext} from 'react';
 import styled from "styled-components";
 import Main from "./Main";
 import loginIcon from "../img/icons/kakao_login.png";
 import axios from "axios";
 import {Route, Routes, useNavigate} from "react-router-dom";
 import Bookmark from "./Bookmark";
+import {myContext} from "./KakaoCallback";
 
-
-const Header = (props) => {
-    const {userInfo, bomi} = props;
+const Header = (kakaoLogout) => {
+    const userInfo = useContext(myContext);
+    const [open , setOpen] = useState(false);
     const navigate = useNavigate();
     const [keyword, setKeyWord] = useState('전시');
     const login_key = process.env.REACT_APP_KAKAOREST_API_KEY;
@@ -19,15 +20,40 @@ const Header = (props) => {
         setKeyWord(keyword);
     }
     const handleClickBookmark = () =>{
-        navigate('/bookmark')
+        if(userInfo) {
+            setOpen(true);
+        } else {
+            window.location.href = KAKAO_AUTH_URL;
+        }
     }
     const onClickLogin = () => {
         window.location.href = KAKAO_AUTH_URL;
     }
     const handleClickLogout  = () =>{
+        const kakaoLogout = async () => {
+            let token = localStorage.getItem("token");
+            try {
+                const user = await axios.get(`https://kapi.kakao.com/v1/user/logout`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                localStorage.removeItem('TOKEN');
+                return navigate('/main')
+            } catch (error) {
+                console.error(error);
+                if (error.response.data.code === 401) {
+                    navigate('/main')
+                }
+                throw error;
+            }
+        };
+        kakaoLogout()
         console.log('로그아웃')
     }
-    console.log("user",userInfo)
+
+    console.log("userName",userInfo)
     return (
         <S.container>
             <S.header>
@@ -36,16 +62,14 @@ const Header = (props) => {
                     <button onClick={() => handleClickKeyword('전시')}>전시</button>
                     <button onClick={() => handleClickKeyword('뮤지컬')}>공연</button>
                     <button onClick={() => handleClickKeyword('축제')}>축제</button>
-                    <button onClick={() => handleClickBookmark('축제')}>북마크</button>
+                    <button onClick={handleClickBookmark}>북마크</button>
+                    {open === true ? <Bookmark setOpen={setOpen}/>:null}
                 </S.menu>
-                <p>{userInfo}</p>
-                <img src={loginIcon} onClick={onClickLogin} alt="icon"/>
-                {/*{userInfo ? <img src={loginIcon} onClick={onClickLogin} alt="icon"/> : <p>로그아웃</p>}*/}
+            {userInfo ?
+                <S.user><p>{userInfo}님 </p> <button onClick={handleClickLogout}>로그아웃</button></S.user> :
+                <S.user><img src={loginIcon} onClick={onClickLogin} alt="icon"/></S.user>}
             </S.header>
             <Main keyword={keyword}/>
-            <Routes>
-                <Route path="/OAuth" element={<Bookmark/>}/>
-            </Routes>
         </S.container>
     );
 };
@@ -68,12 +92,6 @@ S.header = styled.div`
     display: flex;
     justify-content: space-around;
     align-items: center;
-    button{
-        border: 0;
-        background-color: transparent;
-        font-weight: bold;
-        font-size: 14px;
-    }
 `
 S.menu = styled.div`
     display: flex;
@@ -88,5 +106,23 @@ S.menu = styled.div`
         background-color: transparent;
         font-size: 14px;
         font-weight: bold;
+    }
+`
+
+S.user = styled.div`
+    display: flex;
+    align-items: center;
+    p{
+        margin-right: 5px;
+        font-weight: bold;
+    }
+    button{
+        border: 0;
+        background-color: transparent;
+    }
+    img{
+        margin-left: 20px;
+        width: 50px;
+        height: 30px;
     }
 `

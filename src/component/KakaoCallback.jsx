@@ -1,13 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, createContext} from 'react';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import Header from "./Header";
 
+export const myContext = createContext('보미');
 const KakaoCallback = () => {
     const [userInfo, setUserInfo] = useState();
     const navigate = useNavigate();
     const login_key = process.env.REACT_APP_KAKAOREST_API_KEY;
     const redirect_url = process.env.REACT_APP_REDIRECT_URI;
+    const admin_key= process.env.REACT_APP_ADMIN_KEY;
     const code = new URL (window.location.href).searchParams.get("code");
 
     const getToken = async () => {
@@ -48,6 +50,24 @@ const KakaoCallback = () => {
         }
     };
 
+    const kakaoLogout = async () => {
+        let token = localStorage.getItem("token");
+        try {
+            const user = await axios.get(`https://kapi.kakao.com/v1/user/logout`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            return navigate('/main')
+        } catch (error) {
+            console.error(error);
+            if (error.response.data.code === -401) {
+                navigate('/main')
+            }
+            throw error;
+        }
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -57,13 +77,11 @@ const KakaoCallback = () => {
                     // 토큰이 없으면 새로 가져옴
                     token = await getToken();
                     localStorage.setItem("token", token);
-                    console.log('token set::::', token);
                 }
 
                 // 토큰을 이용해 사용자 데이터를 가져옴
                 const data = await getUserData(token);
                 setUserInfo(data.properties);
-                console.log('userInfo', data.properties);
                 navigate("/main");
             } catch (err) {
                 console.log(err);
@@ -73,13 +91,14 @@ const KakaoCallback = () => {
 
         fetchData();
     }, [navigate]);
-    const bomi = "bomi";
+
 
     return (
-        <div>
-            <Header userInfo={userInfo} bomi={bomi}/>
-        </div>
+        <myContext.Provider value={userInfo}>
+            <Header kakaoLogout={kakaoLogout}/>
+        </myContext.Provider>
     );
 };
 
 export default KakaoCallback;
+

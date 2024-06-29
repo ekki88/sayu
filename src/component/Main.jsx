@@ -37,6 +37,7 @@ const Main = (keyword) => {
 
     const handlePageClick = (event) => {
         setCurrentPage(event.selected);
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
     const offset = currentPage * itemsPerPage;
     const currentPageData = Array.isArray(data) ? data.slice(offset, offset + itemsPerPage) : [];
