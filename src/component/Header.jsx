@@ -3,24 +3,26 @@ import styled from "styled-components";
 import Main from "./Main";
 import loginIcon from "../img/icons/kakao_login.png";
 import axios from "axios";
-import {Route, Routes, useNavigate} from "react-router-dom";
+import {Route, Routes, useLocation, useNavigate} from "react-router-dom";
 import Bookmark from "./Bookmark";
 import {myContext} from "./KakaoCallback";
+import {useRecoilState} from "recoil";
 
-const Header = (kakaoLogout) => {
-    const userInfo = useContext(myContext);
+const Header = () => {
     const [open , setOpen] = useState(false);
     const navigate = useNavigate();
     const [keyword, setKeyWord] = useState('전시');
     const login_key = process.env.REACT_APP_KAKAOREST_API_KEY;
     const redirect_url = process.env.REACT_APP_REDIRECT_URI;
+    const logout_key= process.env.REACT_APP_LOGOUT_KEY;
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${login_key}&redirect_uri=${redirect_url}&response_type=code`
+    const token = localStorage.getItem("token");
 
     const handleClickKeyword = (keyword) =>{
         setKeyWord(keyword);
     }
     const handleClickBookmark = () =>{
-        if(userInfo) {
+        if(token) {
             setOpen(true);
         } else {
             window.location.href = KAKAO_AUTH_URL;
@@ -29,44 +31,37 @@ const Header = (kakaoLogout) => {
     const onClickLogin = () => {
         window.location.href = KAKAO_AUTH_URL;
     }
-    const handleClickLogout  = () =>{
-        const kakaoLogout = async () => {
-            let token = localStorage.getItem("token");
-            try {
-                const user = await axios.get(`https://kapi.kakao.com/v1/user/logout`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                localStorage.removeItem('TOKEN');
-                return navigate('/main')
-            } catch (error) {
-                console.error(error);
-                if (error.response.data.code === 401) {
-                    navigate('/main')
-                }
-                throw error;
-            }
-        };
-        kakaoLogout()
-        console.log('로그아웃')
-    }
 
-    console.log("userName",userInfo)
+    const handleClickLogout = async () => {
+        try {
+            const user = await axios.get(`https://kapi.kakao.com/v1/user/logout`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            localStorage.removeItem("token");
+            return navigate('/home')
+        } catch (error) {
+            console.error(error);
+            if (error.response.data.code === -401) {
+                navigate('/home')
+            }
+        }
+    };
+
     return (
         <S.container>
             <S.header>
                 <S.menu>
-                    <h1>SAYU</h1>
+                    <h1 onClick={() => handleClickKeyword('전시')}>SAYU</h1>
                     <button onClick={() => handleClickKeyword('전시')}>전시</button>
                     <button onClick={() => handleClickKeyword('뮤지컬')}>공연</button>
                     <button onClick={() => handleClickKeyword('축제')}>축제</button>
                     <button onClick={handleClickBookmark}>북마크</button>
                     {open === true ? <Bookmark setOpen={setOpen}/>:null}
                 </S.menu>
-            {userInfo ?
-                <S.user><p>{userInfo}님 </p> <button onClick={handleClickLogout}>로그아웃</button></S.user> :
+            {token ?
+                <S.user><button onClick={handleClickLogout}>로그아웃</button></S.user> :
                 <S.user><img src={loginIcon} onClick={onClickLogin} alt="icon"/></S.user>}
             </S.header>
             <Main keyword={keyword}/>
@@ -92,6 +87,8 @@ S.header = styled.div`
     display: flex;
     justify-content: space-around;
     align-items: center;
+    box-shadow: 1px 3px 5px #ccc;
+    margin-bottom: 20px;
 `
 S.menu = styled.div`
     display: flex;

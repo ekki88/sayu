@@ -4,15 +4,15 @@ import close from "../img/icons/close_s.svg";
 import bookmark from "../img/icons/bookmarkFill.svg";
 
 
-const BookMark = (setOpen) => {
+const BookMark = ({setOpen}) => {
     const onClickClose = () =>{
         setOpen(false)
     }
+
     return (
         <S.Modal>
             <S.container>
                 <S.button>
-                    <img src={bookmark} alt='icon'/>
                     <img src={close} alt='closeIcon' onClick={onClickClose}/>
                 </S.button>
             </S.container>

@@ -3,12 +3,18 @@ import axios from "axios";
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
 import DetailedPage from "./DetailedPage";
+import bookmark from "../img/icons/bookmark.svg";
+import heart from "../img/icons/red.svg";
+import favorite from "../img/icons/grey.svg";
+import {useNavigate} from "react-router-dom";
+
 
 const Main = (keyword) => {
     const [data, setData] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [selectedTitle, setSelectedTitle] = useState('');
     const [modal, setModal] = useState(false);
+    const [btn, setBtn] = useState(false);
     const itemsPerPage = 6;
     const api_key = process.env.REACT_APP_API_KEY;
     const today = new Date()
@@ -16,6 +22,7 @@ const Main = (keyword) => {
     const month = (today.getMonth() + 1).toString().padStart(2, '0');
     const day = today.getDate().toString().padStart(2, '0');
     const time = `${year}-${month}-${day}`;
+    const navigate = useNavigate()
 
     useEffect(()=>{
         async function getData(){
@@ -46,38 +53,42 @@ const Main = (keyword) => {
         setSelectedTitle(title);
         setModal(true);
     };
-
-    const onClickPlace = () => {
-        console.log('장소 상세페이지 , 카카오 ')
-    }
+    const onClickBtn = () =>{
+        setBtn(!btn)
+        console.log('ddd')
+    };
 
     return (
         <S.container>
-            <S.list>
+            {currentPageData ? <><S.list>
                 {currentPageData.map((item) => (
                     <S.box key={item.TITLE}>
-                        <S.img src={item.MAIN_IMG} alt="poster" onClick={()=>onClickDetail(item.TITLE)}/>
-                        <S.title onClick={()=>{onClickDetail(item.TITLE)}}>{item.TITLE}</S.title>
-                        <S.place onClick={onClickPlace}>{item.PLACE}</S.place>
+                        <S.imgBox>
+                            <S.img src={item.MAIN_IMG} alt="poster" onClick={() => onClickDetail(item.TITLE)}/>
+                            {btn === true? <S.icon src={heart} alt='icon' onClick={onClickBtn}/>:<S.icon src={favorite} alt='icon' onClick={onClickBtn}/> }
+                        </S.imgBox>
+                        <S.title onClick={() => {onClickDetail(item.TITLE)}}>{item.TITLE}</S.title>
+                        <S.place onClick={() => {navigate(`/map/${item.LOT}/${item.LAT}`)}}>{item.PLACE}</S.place>
                     </S.box>
-                ))}
-            </S.list>
-            {modal === true ? <DetailedPage keyword={keyword} selectedTitle={selectedTitle} setModal={setModal}/>:null}
-            <S.paginationBox>
-                {data.length > 0 && (
-                    <ReactPaginate
-                        previousLabel={"이전"}
-                        nextLabel={"다음"}
-                        breakLabel={"..."}
-                        pageCount={Math.ceil(data.length / itemsPerPage)}
-                        marginPagesDisplayed={2}
-                        pageRangeDisplayed={5}
-                        onPageChange={handlePageClick}
-                        containerClassName={"pagination"}
-                        activeClassName={"active"}
-                    />
-                )}
-            </S.paginationBox>
+                    ))}
+                </S.list>
+                    {modal === true ? <DetailedPage keyword={keyword} selectedTitle={selectedTitle} setModal={setModal}/>:null}
+                <S.paginationBox>
+                    {data.length > 0 && (
+                        <ReactPaginate
+                            previousLabel={"이전"}
+                            nextLabel={"다음"}
+                            breakLabel={"..."}
+                            pageCount={Math.ceil(data.length / itemsPerPage)}
+                            marginPagesDisplayed={2}
+                            pageRangeDisplayed={5}
+                            onPageChange={handlePageClick}
+                            containerClassName={"pagination"}
+                            activeClassName={"active"}
+                        />
+                    )}
+                </S.paginationBox></>:
+                <p>현재 진행중인 행사가 없습니다.</p>}
         </S.container>
 
     );
@@ -94,6 +105,7 @@ S.container = styled.div`
     width: 100%;
     height: 100%;
     place-items: center;
+    cursor: pointer;
 `
 S.header = styled.div`
     width: 100%;
@@ -142,9 +154,20 @@ S.title = styled.p`
 S.place = styled.p`
     color: dimgrey;
     word-break: keep-all;
+   
 `
 S.box =styled.div`
     margin: 10px;
+`
+S.imgBox = styled.div`
+    position: relative;
+`
+S.icon = styled.img`
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 5px;
+    left: 10px;
 `
 S.paginationBox = styled.div`
     display: flex;

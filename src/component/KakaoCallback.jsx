@@ -2,6 +2,7 @@ import React, {useEffect, useState, createContext} from 'react';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import Header from "./Header";
+import {atom} from "recoil";
 
 export const myContext = createContext('보미');
 const KakaoCallback = () => {
@@ -12,6 +13,10 @@ const KakaoCallback = () => {
     const admin_key= process.env.REACT_APP_ADMIN_KEY;
     const code = new URL (window.location.href).searchParams.get("code");
 
+    const userData = atom({
+        key:'userInfo',
+        default:{userInfo}
+    })
     const getToken = async () => {
         try {
             const res = await axios.post(
@@ -32,7 +37,6 @@ const KakaoCallback = () => {
             return res.data.access_token;
         } catch (error) {
             console.error(error);
-            throw error;
         }
     };
 
@@ -46,27 +50,9 @@ const KakaoCallback = () => {
             return user.data;
         } catch (error) {
             console.error(error);
-            throw error;
         }
     };
 
-    const kakaoLogout = async () => {
-        let token = localStorage.getItem("token");
-        try {
-            const user = await axios.get(`https://kapi.kakao.com/v1/user/logout`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            return navigate('/main')
-        } catch (error) {
-            console.error(error);
-            if (error.response.data.code === -401) {
-                navigate('/main')
-            }
-            throw error;
-        }
-    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -82,20 +68,20 @@ const KakaoCallback = () => {
                 // 토큰을 이용해 사용자 데이터를 가져옴
                 const data = await getUserData(token);
                 setUserInfo(data.properties);
-                navigate("/main");
+                navigate("/home",
+                    {state: {user:`${data.properties.nickname}`}});
             } catch (err) {
                 console.log(err);
                 localStorage.removeItem("token");
             }
         };
-
         fetchData();
     }, [navigate]);
 
 
     return (
         <myContext.Provider value={userInfo}>
-            <Header kakaoLogout={kakaoLogout}/>
+            <Header/>
         </myContext.Provider>
     );
 };

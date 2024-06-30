@@ -22,10 +22,10 @@ import {Link, useNavigate} from "react-router-dom";
 const Loading = () => {
     const navigate = useNavigate()
     function onClick () {
-        navigate('/main')
+        navigate('/home')
     }
     return (
-        <Link to='/main'>
+        <Link to='/home'>
             <S.imgBox>
                 <img src={img01} alt='Poster'/>
                 <img src={img02} alt='Poster'/>
@@ -104,7 +104,7 @@ S.imgBoxRight = styled.div`
     animation-name: slideRight;
     img {
         width: 33vw;
-        height: 33vh;
+        height: 34vh;
     }
     @keyframes slideRight {
         from {
