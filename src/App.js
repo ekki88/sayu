@@ -5,6 +5,7 @@ import Header from "./component/Header";
 import React from "react";
 import KakaoCallback from "./component/KakaoCallback";
 import KakaoMap from "./component/KakaoMap";
+import Bookmark from "./component/Bookmark";
 
 function App() {
   return (

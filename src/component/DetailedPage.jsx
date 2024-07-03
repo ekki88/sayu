@@ -1,20 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import axios from "axios";
-import bookmark from "../img/icons/bookmark.svg";
-import bookmarkFill from "../img/icons/bookmarkFill.svg";
 import close from "../img/icons/close_s.svg";
-import KakaoMap from "./KakaoMap";
 import {Routes, useNavigate} from "react-router-dom";
-import heart from "../img/icons/red.svg";
-import favorite from "../img/icons/grey.svg";
+
 
 
 const DetailedPage = (props) => {
     const navigate = useNavigate();
     const {keyword, selectedTitle, setModal} = props;
     const [item, setItem] = useState(null);
-    const [btn, setBtn] = useState(false);
     const api_key = process.env.REACT_APP_API_KEY;
 
 
@@ -35,11 +30,6 @@ const DetailedPage = (props) => {
         setModal(false);
     };
 
-    const onClickBtn = () =>{
-        setBtn(true);
-        console.log('ddd')
-    };
-
     return (
         <>
             {item &&
@@ -48,17 +38,13 @@ const DetailedPage = (props) => {
                         <S.dataBox>
                             <S.imgBox>
                                 <S.img src={item.MAIN_IMG} alt='poster'/>
-                                <S.icon onClick={onClickClose}>
-                                    <img src={favorite} alt='icon'/>
-                                </S.icon>
-                                {setBtn === true ? <S.icon src={heart} alt='icon' onclick={onClickBtn}/>:  <S.icon src={favorite} alt='icon' onclick={onClickBtn}/>}
                             </S.imgBox>
                             <S.list>
                                 <h3>{item.TITLE}</h3>
                                 <li>{item.DATE}</li>
                                 {item.USE_FEE === "무료" ? <li>{item.IS_FREE}</li> : <li>{item.IS_FREE} {item.USE_FEE}</li>}
                                 {item.ORG_NAME === "기타" ? <li>{item.PLACE}</li> : <li>{item.ORG_NAME} {item.PLACE}</li>}
-                                <li onClick={() => {navigate(`/map/${item.LOT}/${item.LAT}`)}}>가는 길
+                                <li onClick={() => {navigate(`/map/${item.LOT}/${item.LAT}`)}}>지도 보기
                                 </li>
                                 <a href={item.ORG_LINK} target="_blank">예약하기 ></a>
                             </S.list>

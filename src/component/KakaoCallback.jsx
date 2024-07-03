@@ -1,22 +1,20 @@
-import React, {useEffect, useState, createContext} from 'react';
+import React, {useEffect} from 'react';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import Header from "./Header";
-import {atom} from "recoil";
 
-export const myContext = createContext('보미');
+
+import {useRecoilState, useSetRecoilState} from 'recoil';
+import {FavoriteList, LoginState} from '../recoil/atom';
+
+
 const KakaoCallback = () => {
-    const [userInfo, setUserInfo] = useState();
     const navigate = useNavigate();
     const login_key = process.env.REACT_APP_KAKAOREST_API_KEY;
     const redirect_url = process.env.REACT_APP_REDIRECT_URI;
-    const admin_key= process.env.REACT_APP_ADMIN_KEY;
     const code = new URL (window.location.href).searchParams.get("code");
+    const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
+    const setFavoriteList = useSetRecoilState(FavoriteList);
 
-    const userData = atom({
-        key:'userInfo',
-        default:{userInfo}
-    })
     const getToken = async () => {
         try {
             const res = await axios.post(
@@ -58,18 +56,21 @@ const KakaoCallback = () => {
         const fetchData = async () => {
             try {
                 let token = localStorage.getItem("token");
-
                 if (!token) {
-                    // 토큰이 없으면 새로 가져옴
                     token = await getToken();
                     localStorage.setItem("token", token);
                 }
 
                 // 토큰을 이용해 사용자 데이터를 가져옴
                 const data = await getUserData(token);
-                setUserInfo(data.properties);
+                localStorage.setItem('user',data.id)
+                const userFavoriteList = JSON.parse(localStorage.getItem(`${data.id}-favoriteList`)) || [];
+
+                setFavoriteList(userFavoriteList);
+                setIsLoggedIn(true)
                 navigate("/home",
-                    {state: {user:`${data.properties.nickname}`}});
+                    {state: {user:`${data}`}});
+                console.log(data)
             } catch (err) {
                 console.log(err);
                 localStorage.removeItem("token");
@@ -80,9 +81,7 @@ const KakaoCallback = () => {
 
 
     return (
-        <myContext.Provider value={userInfo}>
-            <Header/>
-        </myContext.Provider>
+    <></>
     );
 };
 

@@ -3,10 +3,10 @@ import axios from "axios";
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
 import DetailedPage from "./DetailedPage";
-import bookmark from "../img/icons/bookmark.svg";
-import heart from "../img/icons/red.svg";
-import favorite from "../img/icons/grey.svg";
-import {useNavigate} from "react-router-dom";
+import { useNavigate} from "react-router-dom";
+import { useRecoilState } from 'recoil';
+import { CartList,  } from '../recoil/atom';
+import FavoriteIcon from "./FavoriteIcon";
 
 
 const Main = (keyword) => {
@@ -14,7 +14,6 @@ const Main = (keyword) => {
     const [currentPage, setCurrentPage] = useState(0);
     const [selectedTitle, setSelectedTitle] = useState('');
     const [modal, setModal] = useState(false);
-    const [btn, setBtn] = useState(false);
     const itemsPerPage = 6;
     const api_key = process.env.REACT_APP_API_KEY;
     const today = new Date()
@@ -22,12 +21,15 @@ const Main = (keyword) => {
     const month = (today.getMonth() + 1).toString().padStart(2, '0');
     const day = today.getDate().toString().padStart(2, '0');
     const time = `${year}-${month}-${day}`;
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
 
     useEffect(()=>{
         async function getData(){
             try{
-                const response = await axios.get(`http://openapi.seoul.go.kr:8088/${api_key}/json/culturalEventInfo/1/1000/${keyword.keyword}/ `)
+                const response = await axios.get(`http://openapi.seoul.go.kr:8088/${api_key}/json/culturalEventInfo/1/1000/${keyword.keyword}/ `,{
+                    signal:AbortSignal.timeout(5000)
+                })
                 const result = response.data
                 const filteredData = result.culturalEventInfo.row.filter(
                     item => item.GUNAME === "종로구" && item.STRTDATE <= time && item.END_DATE >= time
@@ -35,6 +37,7 @@ const Main = (keyword) => {
                 setData(filteredData);
             }
             catch(e) {
+                alert('조금만 기다려주세요.')
                 console.log(e)
             }
         }
@@ -51,45 +54,45 @@ const Main = (keyword) => {
 
     const onClickDetail = (title) => {
         setSelectedTitle(title);
+        navigate("detail",
+            {state: {title:`${title}`}});
         setModal(true);
     };
-    const onClickBtn = () =>{
-        setBtn(!btn)
-        console.log('ddd')
-    };
 
-    return (
-        <S.container>
-            {currentPageData ? <><S.list>
-                {currentPageData.map((item) => (
-                    <S.box key={item.TITLE}>
-                        <S.imgBox>
-                            <S.img src={item.MAIN_IMG} alt="poster" onClick={() => onClickDetail(item.TITLE)}/>
-                            {btn === true? <S.icon src={heart} alt='icon' onClick={onClickBtn}/>:<S.icon src={favorite} alt='icon' onClick={onClickBtn}/> }
-                        </S.imgBox>
-                        <S.title onClick={() => {onClickDetail(item.TITLE)}}>{item.TITLE}</S.title>
-                        <S.place onClick={() => {navigate(`/map/${item.LOT}/${item.LAT}`)}}>{item.PLACE}</S.place>
-                    </S.box>
-                    ))}
-                </S.list>
-                    {modal === true ? <DetailedPage keyword={keyword} selectedTitle={selectedTitle} setModal={setModal}/>:null}
-                <S.paginationBox>
-                    {data.length > 0 && (
-                        <ReactPaginate
-                            previousLabel={"이전"}
-                            nextLabel={"다음"}
-                            breakLabel={"..."}
-                            pageCount={Math.ceil(data.length / itemsPerPage)}
-                            marginPagesDisplayed={2}
-                            pageRangeDisplayed={5}
-                            onPageChange={handlePageClick}
-                            containerClassName={"pagination"}
-                            activeClassName={"active"}
-                        />
-                    )}
-                </S.paginationBox></>:
-                <p>현재 진행중인 행사가 없습니다.</p>}
-        </S.container>
+    return (<>
+            <S.container>
+                {currentPageData ? <><S.list>
+                        {currentPageData.map((item,idx) => (
+                            <S.box key={item.TITLE}>
+                                <S.imgBox>
+                                    <S.img src={item.MAIN_IMG} alt="poster" onClick={() => onClickDetail(item.TITLE)}/>
+                                    <FavoriteIcon title={item.TITLE} item={item} />
+                                </S.imgBox>
+                                <S.title onClick={() => {onClickDetail(item.TITLE)}}>{item.TITLE}</S.title>
+                                <S.place onClick={() => {navigate(`/map/${item.LOT}/${item.LAT}`)}}>{item.PLACE}</S.place>
+                            </S.box>
+                        ))}
+                    </S.list>
+                        {modal === true ? <DetailedPage keyword={keyword} selectedTitle={selectedTitle} setModal={setModal}/>:null}
+                        <S.paginationBox>
+                            {data.length > 0 && (
+                                <ReactPaginate
+                                    previousLabel={"이전"}
+                                    nextLabel={"다음"}
+                                    breakLabel={"..."}
+                                    pageCount={Math.ceil(data.length / itemsPerPage)}
+                                    marginPagesDisplayed={2}
+                                    pageRangeDisplayed={5}
+                                    onPageChange={handlePageClick}
+                                    containerClassName={"pagination"}
+                                    activeClassName={"active"}
+                                />
+                            )}
+                        </S.paginationBox></>:
+                    <p>현재 진행중인 행사가 없습니다.</p>}
+            </S.container>
+    </>
+
 
     );
 };
@@ -161,6 +164,13 @@ S.box =styled.div`
 `
 S.imgBox = styled.div`
     position: relative;
+    //FavoriteIcon{
+    //    position: absolute;
+    //    width: 30px;
+    //    height: 30px;
+    //    top: 5px;
+    //    left: 10px;
+    //}
 `
 S.icon = styled.img`
     position: absolute;
