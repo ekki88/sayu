@@ -5,6 +5,7 @@ import ReactPaginate from "react-paginate";
 import DetailedPage from "./DetailedPage";
 import { useNavigate} from "react-router-dom";
 import FavoriteIcon from "./FavoriteIcon";
+import * as http from "node:http";
 
 
 const Main = (keyword) => {
@@ -27,7 +28,7 @@ const Main = (keyword) => {
     useEffect(()=>{
         async function getData(){
             try{
-                const response = await axios.get(URL,{
+                const response = await axios.get(`openapi.seoul.go.kr:8088/${api_key}/json/culturalEventInfo/1/1000/${keyword.keyword}/ `,{
                     signal:AbortSignal.timeout(5000)
                 })
                 const result = response.data
