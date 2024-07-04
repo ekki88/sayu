@@ -1,0 +1,11 @@
+[[redirects]]
+from = "/proxy/*"
+to = "https://openapi.seoul.go.kr:8088/:splat"
+status = 200
+force = true
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+force = false
