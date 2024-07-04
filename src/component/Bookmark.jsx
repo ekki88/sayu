@@ -2,20 +2,17 @@ import React, {useState} from 'react';
 import styled from "styled-components";
 import close from "../img/icons/close_s.svg";
 import { useRecoilState } from 'recoil';
-import {CartList, FavoriteList} from '../recoil/atom';
-import heart from "../img/icons/red.svg";
-import favorite from "../img/icons/grey.svg";
+import {FavoriteList} from '../recoil/atom';
 import {useNavigate} from "react-router-dom";
-import FavoriteIcon from "./FavoriteIcon";
 import ReactPaginate from "react-paginate";
-import DetailedPage from "./DetailedPage";
+import FavoriteIcon from "./FavoriteIcon";
+
 
 const BookMark = () => {
     const [favoriteList, setFavoriteList] = useRecoilState(FavoriteList );
     const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 3;
     const navigate = useNavigate();
-    const [modal, setModal] = useState(false);
 
     const handlePageClick = (event) => {
         setCurrentPage(event.selected);
@@ -27,10 +24,6 @@ const BookMark = () => {
     const onClickClose = () =>{
         navigate('/home')
     }
-    const onClickDetail = (title) => {
-        navigate("/home/detail",
-            {state: {title:`${title}`}});
-    };
 
     return (
         <S.Modal>
@@ -43,9 +36,9 @@ const BookMark = () => {
                         return(
                             <S.bookMark idx={item.title}>
                                 <img src={item.item.MAIN_IMG} alt="poster"/>
-                                <p onClick={() => onClickDetail(item.TITLE)}>{item.title}</p>
+                                <p>{item.title}</p>
+                                <FavoriteIcon title={item.title} item={item}/>
                             </S.bookMark>
-
                         )
                     })}
                     <S.paginationBox>
@@ -67,7 +60,7 @@ const BookMark = () => {
                     <S.button>
                         <img src={close} alt='closeIcon' onClick={onClickClose}/>
                     </S.button>
-                    <p style={{textAlign:"center"}}>현재 북마크한 행사가 없습니다.</p>
+                    <S.desc>현재 북마크한 행사가 없습니다.</S.desc>
                 </>}
             </S.container>
         </S.Modal>
@@ -153,3 +146,9 @@ S.paginationBox = styled.div`
     cursor: pointer;
   }
   `
+
+S.desc = styled.p`
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+`

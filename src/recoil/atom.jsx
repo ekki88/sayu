@@ -13,7 +13,6 @@ export const localStorageEffect =(token)=> {
             // 로컬 스토리지에 저장된 값이 없으면 로그아웃 처리
             localStorage.removeItem(token);
             localStorage.removeItem('recoil-persist');
-            localStorage.removeItem('refreshToken');
         }
 
         onSet((newValue, _, isReset) => {
@@ -30,12 +29,6 @@ export const LoginState = atom({
     default: false,
     effects: [localStorageEffect('user')],
 });
-
-export const CartList = atom({
-    key: 'CartList',
-    default: [],
-    effects_UNSTABLE: [persistAtom],
-})
 
 export const FavoriteList  = atom({
     key: 'FavoriteList ',

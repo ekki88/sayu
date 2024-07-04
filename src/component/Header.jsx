@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import {Route, Routes, useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import Main from "./Main";
+import Bookmark from "./Bookmark";
 import loginIcon from "../img/icons/kakao_login.png";
 import axios from "axios";
-import Bookmark from "./Bookmark";
-import {useRecoilState, useResetRecoilState, useSetRecoilState} from 'recoil';
+import {useRecoilState, useResetRecoilState} from 'recoil';
 import {FavoriteList, LoginState} from '../recoil/atom';
 
 const Header = () => {
@@ -17,11 +17,11 @@ const Header = () => {
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${login_key}&redirect_uri=${redirect_url}&response_type=code`
     const token = localStorage.getItem("token");
     const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
-    const resetFavoriteList = useResetRecoilState(FavoriteList);
 
     const handleClickKeyword = (keyword) =>{
         setKeyWord(keyword);
     }
+
     const handleClickBookmark = () =>{
         if(token) {
             navigate('bookmark')
@@ -29,6 +29,7 @@ const Header = () => {
             alert('로그인 후 사용 가능합니다.')
         }
     }
+
     const onClickLogin = () => {
         window.location.href = KAKAO_AUTH_URL;
     }
@@ -41,10 +42,6 @@ const Header = () => {
                 },
             });
             localStorage.removeItem("token");
-            const userId = localStorage.getItem("user");
-
-            const userFavoriteList = JSON.parse(localStorage.getItem(`${userId}-favoriteList`)) || [];
-            resetFavoriteList();
             setIsLoggedIn(false);
             return window.location.reload('/home');
         } catch (error) {

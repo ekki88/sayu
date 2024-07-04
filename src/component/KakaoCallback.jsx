@@ -3,8 +3,8 @@ import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
 
-import {useRecoilState, useSetRecoilState} from 'recoil';
-import {FavoriteList, LoginState} from '../recoil/atom';
+import {useRecoilState} from 'recoil';
+import {LoginState} from '../recoil/atom';
 
 
 const KakaoCallback = () => {
@@ -13,7 +13,7 @@ const KakaoCallback = () => {
     const redirect_url = process.env.REACT_APP_REDIRECT_URI;
     const code = new URL (window.location.href).searchParams.get("code");
     const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
-    const setFavoriteList = useSetRecoilState(FavoriteList);
+
 
     const getToken = async () => {
         try {
@@ -63,14 +63,9 @@ const KakaoCallback = () => {
 
                 // 토큰을 이용해 사용자 데이터를 가져옴
                 const data = await getUserData(token);
-                localStorage.setItem('user',data.id)
-                const userFavoriteList = JSON.parse(localStorage.getItem(`${data.id}-favoriteList`)) || [];
-
-                setFavoriteList(userFavoriteList);
                 setIsLoggedIn(true)
                 navigate("/home",
                     {state: {user:`${data}`}});
-                console.log(data)
             } catch (err) {
                 console.log(err);
                 localStorage.removeItem("token");

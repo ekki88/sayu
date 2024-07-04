@@ -4,8 +4,6 @@ import styled from "styled-components";
 import ReactPaginate from "react-paginate";
 import DetailedPage from "./DetailedPage";
 import { useNavigate} from "react-router-dom";
-import { useRecoilState } from 'recoil';
-import { CartList,  } from '../recoil/atom';
 import FavoriteIcon from "./FavoriteIcon";
 
 
@@ -37,7 +35,7 @@ const Main = (keyword) => {
                 setData(filteredData);
             }
             catch(e) {
-                alert('조금만 기다려주세요.')
+                alert('잠시 후 다시 시도해주세요.')
                 console.log(e)
             }
         }
@@ -54,8 +52,6 @@ const Main = (keyword) => {
 
     const onClickDetail = (title) => {
         setSelectedTitle(title);
-        navigate("detail",
-            {state: {title:`${title}`}});
         setModal(true);
     };
 
@@ -92,8 +88,6 @@ const Main = (keyword) => {
                     <p>현재 진행중인 행사가 없습니다.</p>}
             </S.container>
     </>
-
-
     );
 };
 
