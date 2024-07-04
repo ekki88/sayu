@@ -2,9 +2,10 @@ import React, {useEffect} from 'react';
 import {useParams} from "react-router-dom";
 import styled from "styled-components";
 
-const KakaoMap = () => {
+const KakaoMap = (props) => {
+    const {} = props;
     const { lat, lng } = useParams();
-
+console.log("지도 확인 ",lat)
     useEffect(() => {
         const { kakao } = window;
         const latitude = parseFloat(lat);

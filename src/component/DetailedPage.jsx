@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import axios from "axios";
 import close from "../img/icons/close_s.svg";
-import {useNavigate} from "react-router-dom";
+import {Routes, useNavigate} from "react-router-dom";
 
 
 
@@ -55,6 +55,9 @@ const DetailedPage = (props) => {
                     </S.container>
                 </S.Modal>
             }
+            <Routes>
+
+            </Routes>
         </>
     );
 };
