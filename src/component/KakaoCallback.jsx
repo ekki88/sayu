@@ -10,7 +10,7 @@ import {LoginState} from '../recoil/atom';
 const KakaoCallback = () => {
     const navigate = useNavigate();
     const login_key = process.env.REACT_APP_KAKAOREST_API_KEY;
-    const redirect_url = String(process.env.REACT_APP_REDIRECT_URI);
+    const redirect_url = process.env.REACT_APP_REDIRECT_URI;
     const code = new URL (window.location.href).searchParams.get("code");
     const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
 
