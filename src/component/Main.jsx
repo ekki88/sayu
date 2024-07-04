@@ -21,9 +21,6 @@ const Main = (keyword) => {
     const day = today.getDate().toString().padStart(2, '0');
     const time = `${year}-${month}-${day}`;
     const navigate = useNavigate();
-    const PROXY = window.location.hostname === 'localhost' ? '' : '/proxy';
-    const URL = `${PROXY}/${api_key}/json/culturalEventInfo/1/1000/${keyword.keyword}/ `;
-
 
     useEffect(()=>{
         async function getData(){
