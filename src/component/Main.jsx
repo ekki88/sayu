@@ -4,10 +4,8 @@ import styled from "styled-components";
 import ReactPaginate from "react-paginate";
 import DetailedPage from "./DetailedPage";
 import { useNavigate} from "react-router-dom";
-import { useRecoilState } from 'recoil';
-import { CartList,  } from '../recoil/atom';
 import FavoriteIcon from "./FavoriteIcon";
-import * as http from "node:http";
+
 
 
 const Main = (keyword) => {
@@ -27,7 +25,7 @@ const Main = (keyword) => {
     useEffect(()=>{
         async function getData(){
             try{
-                const response = await axios.get(`/openapi.seoul.go.kr:8088/${api_key}/json/culturalEventInfo/1/1000/${keyword.keyword}/ `,{
+                const response = await axios.get(`http://openapi.seoul.go.kr:8088/${api_key}/json/culturalEventInfo/1/1000/${keyword.keyword}/ `,{
                     signal:AbortSignal.timeout(5000)
                 })
                 const result = response.data
