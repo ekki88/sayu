@@ -1,0 +1,17 @@
+[[redirects]]
+from = "/proxy/*"
+to = "https://sayu-0.netlify.app/:splat"
+status = 200
+force = true
+
+[[redirects]]
+from = "/main/*"
+to = "http://openapi.seoul.go.kr:8088/:splat"
+status = 200
+force = true
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+force = false

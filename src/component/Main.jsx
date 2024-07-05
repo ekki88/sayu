@@ -22,12 +22,27 @@ const Main = (keyword) => {
     const time = `${year}-${month}-${day}`;
     const navigate = useNavigate();
 
+    const MAIN = window.location.hostname === 'localhost' ? '' : '/main';
+    const URL = `${MAIN}`;
+
+//api 요청 인스턴스
+ const api = axios.create({
+        baseURL: URL,
+        withCredentials: true, //옵션
+        headers: { 'Content-Type': 'application/json' }, //옵션
+    });
+console.log('api', api)
     useEffect(()=>{
         async function getData(){
             try{
-                const response = await axios.get(`http://openapi.seoul.go.kr:8088/${api_key}/json/culturalEventInfo/1/1000/${keyword.keyword}/ `,{
-                    signal:AbortSignal.timeout(5000)
-                })
+                const response =
+                    await api(
+                        {
+                            method: "get",
+                            url: `/${api_key}/json/culturalEventInfo/1/1000/${keyword.keyword}/ `,
+                            signal:AbortSignal.timeout(5000)
+                        }
+                    )
                 const result = response.data
                 const filteredData = result.culturalEventInfo.row.filter(
                     item => item.GUNAME === "종로구" && item.STRTDATE <= time && item.END_DATE >= time
