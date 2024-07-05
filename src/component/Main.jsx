@@ -31,7 +31,7 @@ const Main = (keyword) => {
         withCredentials: true, //옵션
         headers: { 'Content-Type': 'application/json' }, //옵션
     });
-console.log('api', api)
+
     useEffect(()=>{
         async function getData(){
             try{
