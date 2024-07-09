@@ -2,8 +2,6 @@ import React from 'react';
 import {atom} from 'recoil';
 import {recoilPersist} from 'recoil-persist';
 
-const {persistAtom} = recoilPersist();
-
 const localStorageEffect = (key) => ({setSelf, onSet}) => {
     const savedValue = localStorage.getItem(key);
     if (savedValue != null) {
@@ -16,7 +14,6 @@ const localStorageEffect = (key) => ({setSelf, onSet}) => {
             : localStorage.setItem(key, JSON.stringify(newValue));
     });
 };
-
 
 export const LoginState = atom({
     key: 'LoginState',

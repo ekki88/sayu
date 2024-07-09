@@ -125,6 +125,7 @@ S.menu = styled.div`
         border: 0;
         background-color: transparent;
         font-size: 0.9em;
+        color: black;
 
         &:hover {
             font-weight: bold;
