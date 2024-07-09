@@ -48,9 +48,9 @@ const Main = (keyword) => {
                     item => item.GUNAME === "종로구" && item.STRTDATE <= time && item.END_DATE >= time
                 );
                 setData(filteredData);
-            } catch (e) {
+            } catch (err) {
                 alert('조금만 기다려주세요.')
-                console.log(e)
+                console.log(err)
             }
         }
 
@@ -200,10 +200,11 @@ S.btnBox = styled.div`
 `
 
 S.button = styled.button`
-    width: 53%;
+    width: 62%;
     height: 40px;
-    background-color: lightgrey;
-    border: none;
+    background-color: transparent;
+    border: 1px solid dimgrey;
+    border-radius: 5px;
 
     a {
         text-decoration: none;
@@ -211,10 +212,8 @@ S.button = styled.button`
         font-weight: bold;
     }
 
-    border-radius: 5px;
-
     &:hover {
-        background-color: #00A1E9;
+        background-color: dimgrey;
 
         a {
             color: #FFF;
@@ -222,10 +221,15 @@ S.button = styled.button`
     }
 `
 S.bookMark = styled.button`
-    width: 40%;
+    width: 35%;
     height: 40px;
+    padding-top: 2px;
     border: none;
     border-radius: 5px;
+
+    &:hover {
+        background-color: lightgrey;
+    }
 `
 S.icon = styled.img`
     position: fixed;

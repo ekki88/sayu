@@ -19,8 +19,8 @@ const DetailedPage = (props) => {
                     const response = await axios.get(`http://openapi.seoul.go.kr:8088/${api_key}/json/culturalEventInfo/1/1000/${keyword.keyword}/ `);
                     const result = response.data.culturalEventInfo.row.find(item => item.TITLE === selectedTitle);
                     setItem(result);
-                } catch (e) {
-                    console.log(e);
+                } catch (err) {
+                    console.log(err);
                 }
             }
             fetchData();

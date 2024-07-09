@@ -7,7 +7,7 @@ import loginIcon from "../img/icons/kakao_login.png";
 import axios from "axios";
 import Bookmark from "./Bookmark";
 import {useRecoilState, useResetRecoilState, useSetRecoilState} from 'recoil';
-import {FavoriteList, LoginState} from '../recoil/atom';
+import {FavoriteList, LoginState, UserIdState} from '../recoil/atom';
 import {media} from "../styles/media";
 
 const Header = () => {
@@ -18,8 +18,9 @@ const Header = () => {
     const redirect_url = process.env.REACT_APP_REDIRECT_URI;
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${login_key}&redirect_uri=${redirect_url}&response_type=code`
     const token = localStorage.getItem("token");
-    const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
-    const resetFavoriteList = useResetRecoilState(FavoriteList);
+    const [loginState, setLoginState] = useRecoilState(LoginState);
+    const [userId, setUserId] = useRecoilState(UserIdState);
+    const [bookmarkList, setBookmarkList] = useRecoilState(FavoriteList);
 
     const handleClickKeyword = (keyword) => {
         setKeyWord(keyword);
@@ -43,15 +44,14 @@ const Header = () => {
                 },
             });
             localStorage.removeItem("token");
-            const userId = localStorage.getItem("user");
-
-            const userFavoriteList = JSON.parse(localStorage.getItem(`${userId}-favoriteList`)) || [];
-            resetFavoriteList();
-            setIsLoggedIn(false);
+            setUserId('');
+            setLoginState(false);
+            setBookmarkList([]);
+            localStorage.removeItem('favoriteList');
             return window.location.reload('/home');
-        } catch (error) {
-            console.error(error);
-            if (error.response.data.code === -401) {
+        } catch (err) {
+            console.error(err);
+            if (err.response.data.code === -401) {
                 navigate('/home')
             }
         }
@@ -125,7 +125,10 @@ S.menu = styled.div`
         border: 0;
         background-color: transparent;
         font-size: 0.9em;
-        font-weight: bold;
+
+        &:hover {
+            font-weight: bold;
+        }
     }
 
     ${media.phone`
@@ -134,6 +137,9 @@ S.menu = styled.div`
         }
         button{
             margin: 0.4em;
+            &:hover{
+            font-weight: bold;
+        }
         }
   `}
 `

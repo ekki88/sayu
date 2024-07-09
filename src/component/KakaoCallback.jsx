@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 
 
 import {useRecoilState, useSetRecoilState} from 'recoil';
-import {FavoriteList, LoginState} from '../recoil/atom';
+import {FavoriteList, LoginState, UserIdState} from '../recoil/atom';
 
 
 const KakaoCallback = () => {
@@ -13,8 +13,8 @@ const KakaoCallback = () => {
     const login_key = process.env.REACT_APP_KAKAOREST_API_KEY;
     const redirect_url = process.env.REACT_APP_REDIRECT_URI;
     const code = new URL(window.location.href).searchParams.get("code");
-    const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
-    const setFavoriteList = useSetRecoilState(FavoriteList);
+    const [loginState, setLoginState] = useRecoilState(LoginState);
+    const [userId, setUserId] = useRecoilState(UserIdState);
 
     const getToken = async () => {
         try {
@@ -34,8 +34,8 @@ const KakaoCallback = () => {
             );
             localStorage.setItem("token", res.data.access_token);
             return res.data.access_token;
-        } catch (error) {
-            console.error(error);
+        } catch (err) {
+            console.error(err);
         }
     };
 
@@ -47,8 +47,8 @@ const KakaoCallback = () => {
                 },
             });
             return user.data;
-        } catch (error) {
-            console.error(error);
+        } catch (err) {
+            console.error(err);
         }
     };
 
@@ -61,17 +61,13 @@ const KakaoCallback = () => {
                     token = await getToken();
                     localStorage.setItem("token", token);
                 }
-
-                // 토큰을 이용해 사용자 데이터를 가져옴
                 const data = await getUserData(token);
-                localStorage.setItem('user', data.id)
-                const userFavoriteList = JSON.parse(localStorage.getItem(`${data.id}-favoriteList`)) || [];
-
-                setFavoriteList(userFavoriteList);
-                setIsLoggedIn(true)
-                navigate("/home",
-                    {state: {user: `${data}`}});
-                console.log(data)
+                const user = {id: data.id}
+                if (user) {
+                    setUserId(user.id);
+                    setLoginState(true);
+                }
+                navigate("/home");
             } catch (err) {
                 console.log(err);
                 localStorage.removeItem("token");
@@ -79,7 +75,6 @@ const KakaoCallback = () => {
         };
         fetchData();
     }, [navigate]);
-
 
     return (
         <></>

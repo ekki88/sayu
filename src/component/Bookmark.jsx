@@ -3,13 +3,10 @@ import React, {useState} from 'react';
 import styled from "styled-components";
 import close from "../img/icons/close_s.svg";
 import {useRecoilState} from 'recoil';
-import {CartList, FavoriteList} from '../recoil/atom';
-import heart from "../img/icons/red.svg";
-import favorite from "../img/icons/grey.svg";
+import {FavoriteList} from '../recoil/atom';
 import {useNavigate} from "react-router-dom";
 import FavoriteIcon from "./FavoriteIcon";
 import ReactPaginate from "react-paginate";
-import DetailedPage from "./DetailedPage";
 import {media} from "../styles/media";
 
 const BookMark = () => {
@@ -43,7 +40,6 @@ const BookMark = () => {
                                 <img src={item.item.MAIN_IMG} alt="poster"/>
                                 <p>{item.title}</p>
                                 <FavoriteIcon item={item} title={item.title}/>
-                                {/*<img src={close} alt='closeIcon' id="close"/>*/}
                             </S.bookMark>
                         )
                     })}
@@ -127,7 +123,7 @@ S.button = styled.button`
 S.bookMark = styled.div`
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
     align-items: center;
     font-size: 14px;
 
@@ -137,14 +133,10 @@ S.bookMark = styled.div`
         margin: 15px;
     }
 
-    #close {
-        width: 30px;
-        height: 30px;
+    #heart {
+        width: 35px;
+        height: 35px;
         margin-left: auto;
-    }
-
-    FavoriteIcon {
-        background-color: dimgrey;
     }
 
     ${media.phone`
@@ -157,13 +149,14 @@ S.bookMark = styled.div`
         text-align: left;
         font-size:10px;
         }
-        #close{
+        #heart{
         width: 20px;
         height: 20px;
-        margin:3px;
-        }
+        margin-left: auto;
+    }
   `}
 `
+
 S.icon = styled.img`
     width: 10px;
     height: 10px;
@@ -196,5 +189,16 @@ S.paginationBox = styled.div`
 `
 
 S.noBookMark = styled.p`
-
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 200px;
+    ${media.phone`
+        font-size:12px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 200px;
+        word-break: keep-all;
+  `}
 `

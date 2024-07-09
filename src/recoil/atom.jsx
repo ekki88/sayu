@@ -1,28 +1,21 @@
 import React from 'react';
-import { atom } from 'recoil';
-import { recoilPersist } from 'recoil-persist';
+import {atom} from 'recoil';
+import {recoilPersist} from 'recoil-persist';
 
-const { persistAtom } = recoilPersist();
+const {persistAtom} = recoilPersist();
 
-export const localStorageEffect =(token)=> {
-    return ({ setSelf, onSet }) => {
-        const savedValue = localStorage.getItem(token);
-        if (savedValue != null) {
-            setSelf(JSON.parse(savedValue));
-        } else {
-            // 로컬 스토리지에 저장된 값이 없으면 로그아웃 처리
-            localStorage.removeItem(token);
-            localStorage.removeItem('recoil-persist');
-            localStorage.removeItem('refreshToken');
-        }
+const localStorageEffect = (key) => ({setSelf, onSet}) => {
+    const savedValue = localStorage.getItem(key);
+    if (savedValue != null) {
+        setSelf(JSON.parse(savedValue));
+    }
 
-        onSet((newValue, _, isReset) => {
-            isReset
-                ? localStorage.removeItem(token)
-                : localStorage.setItem(token, JSON.stringify(newValue));
-        });
-    };
-}
+    onSet((newValue, _, isReset) => {
+        isReset
+            ? localStorage.removeItem(key)
+            : localStorage.setItem(key, JSON.stringify(newValue));
+    });
+};
 
 
 export const LoginState = atom({
@@ -31,16 +24,16 @@ export const LoginState = atom({
     effects: [localStorageEffect('user')],
 });
 
-export const CartList = atom({
-    key: 'CartList',
-    default: [],
-    effects_UNSTABLE: [persistAtom],
-})
+export const UserIdState = atom({
+    key: 'UserIdState',
+    default: '',
+    effects: [localStorageEffect('userId')],
+});
 
-export const FavoriteList  = atom({
+export const FavoriteList = atom({
     key: 'FavoriteList ',
     default: [],
-    effects_UNSTABLE: [persistAtom],
+    effects_UNSTABLE: [localStorageEffect('bookmarks')],
 })
 
 const Atom = () => {
