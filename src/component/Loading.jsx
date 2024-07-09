@@ -1,3 +1,4 @@
+// 시작 페이지
 import React from 'react';
 import styled from "styled-components";
 
@@ -21,9 +22,11 @@ import {Link, useNavigate} from "react-router-dom";
 
 const Loading = () => {
     const navigate = useNavigate()
-    function onClick () {
+
+    function onClick() {
         navigate('/home')
     }
+
     return (
         <Link to='/home'>
             <S.imgBox>
@@ -77,10 +80,12 @@ S.imgBox = styled.div`
     overflow: hidden;
     animation-duration: 3s;
     animation-name: slide;
+
     img {
         width: 33vw;
         height: 33vh;
     }
+
     @keyframes slide {
         from {
             margin-left: 100%;
@@ -102,10 +107,12 @@ S.imgBoxRight = styled.div`
     overflow: hidden;
     animation-duration: 3s;
     animation-name: slideRight;
+
     img {
         width: 33vw;
         height: 34vh;
     }
+
     @keyframes slideRight {
         from {
             margin-left: -100%;

@@ -1,3 +1,4 @@
+// 메뉴바
 import React, {useState} from 'react';
 import {Route, Routes, useNavigate} from "react-router-dom";
 import styled from "styled-components";
@@ -10,7 +11,7 @@ import {FavoriteList, LoginState} from '../recoil/atom';
 import {media} from "../styles/media";
 
 const Header = () => {
-    const [open , setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
     const navigate = useNavigate();
     const [keyword, setKeyWord] = useState('전시');
     const login_key = process.env.REACT_APP_KAKAOREST_API_KEY;
@@ -20,11 +21,11 @@ const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
     const resetFavoriteList = useResetRecoilState(FavoriteList);
 
-    const handleClickKeyword = (keyword) =>{
+    const handleClickKeyword = (keyword) => {
         setKeyWord(keyword);
     }
-    const handleClickBookmark = () =>{
-        if(token) {
+    const handleClickBookmark = () => {
+        if (token) {
             navigate('bookmark')
         } else {
             alert('로그인 후 사용 가능합니다.')
@@ -66,10 +67,12 @@ const Header = () => {
                         <button onClick={() => handleClickKeyword('오페라')}>공연</button>
                         <button onClick={() => handleClickKeyword('축제')}>축제</button>
                         <button onClick={handleClickBookmark}>북마크</button>
-                        {open === true ? <Bookmark setOpen={setOpen}/>:null}
+                        {open === true ? <Bookmark setOpen={setOpen}/> : null}
                     </S.menu>
                     {token ?
-                        <S.user><button onClick={handleClickLogout}>로그아웃</button></S.user> :
+                        <S.user>
+                            <button onClick={handleClickLogout}>로그아웃</button>
+                        </S.user> :
                         <S.user><img src={loginIcon} onClick={onClickLogin} alt="icon"/></S.user>}
                 </S.header>
                 <Main keyword={keyword}/>
@@ -90,11 +93,8 @@ S.container = styled.div`
     justify-content: center;
     width: 100%;
     height: 100%;
-    font-size:14px;
+    font-size: 14px;
     place-items: center;
-    ${media.phone`
-    max-width: 100%;
-  `}
 `
 
 S.header = styled.div`
@@ -104,12 +104,9 @@ S.header = styled.div`
     justify-content: space-around;
     align-items: center;
     margin-bottom: 20px;
-    
+
     ${media.phone`
         width:90%;
-        height: 70px;
-        display: flex;
-        justify-content: space-around;
         margin-bottom: 10px;
   `}
 `
@@ -118,21 +115,20 @@ S.menu = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    h1{
+
+    h1 {
         margin-right: 15px;
     }
-    button{
+
+    button {
         margin: 20px;
         border: 0;
         background-color: transparent;
         font-size: 0.9em;
         font-weight: bold;
     }
+
     ${media.phone`
-        width: 100%;
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
         h1{
             font-size:1.2em;
         }
@@ -146,18 +142,21 @@ S.user = styled.div`
     display: flex;
     align-items: center;
     margin-left: auto;
-    button{
+
+    button {
         border: 0;
         font-size: 0.9em;
         background-color: transparent;
         width: 70px;
         height: 30px;
     }
-    img{
+
+    img {
         margin-left: 20px;
         width: 50px;
         height: 30px;
     }
+
     ${media.phone`
         max-width: 100%;
         display: flex;

@@ -1,3 +1,4 @@
+// 카카오 로그인 로직
 import React, {useEffect} from 'react';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
@@ -11,7 +12,7 @@ const KakaoCallback = () => {
     const navigate = useNavigate();
     const login_key = process.env.REACT_APP_KAKAOREST_API_KEY;
     const redirect_url = process.env.REACT_APP_REDIRECT_URI;
-    const code = new URL (window.location.href).searchParams.get("code");
+    const code = new URL(window.location.href).searchParams.get("code");
     const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
     const setFavoriteList = useSetRecoilState(FavoriteList);
 
@@ -63,13 +64,13 @@ const KakaoCallback = () => {
 
                 // 토큰을 이용해 사용자 데이터를 가져옴
                 const data = await getUserData(token);
-                localStorage.setItem('user',data.id)
+                localStorage.setItem('user', data.id)
                 const userFavoriteList = JSON.parse(localStorage.getItem(`${data.id}-favoriteList`)) || [];
 
                 setFavoriteList(userFavoriteList);
                 setIsLoggedIn(true)
                 navigate("/home",
-                    {state: {user:`${data}`}});
+                    {state: {user: `${data}`}});
                 console.log(data)
             } catch (err) {
                 console.log(err);
@@ -81,7 +82,7 @@ const KakaoCallback = () => {
 
 
     return (
-    <></>
+        <></>
     );
 };
 

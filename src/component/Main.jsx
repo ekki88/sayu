@@ -1,14 +1,13 @@
+// 메인화면 프로젝트 리스트
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
 import DetailedPage from "./DetailedPage";
-import { useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import FavoriteIcon from "./FavoriteIcon";
 import {media} from "../styles/media";
 import upIcon from "../img/icons/arrow.svg";
-
-
 
 const Main = (keyword) => {
     const [data, setData] = useState('');
@@ -27,21 +26,21 @@ const Main = (keyword) => {
     const MAIN = window.location.hostname === 'localhost' ? 'http://openapi.seoul.go.kr:8088/' : '/main';
     const URL = `${MAIN}`;
 
- const api = axios.create({
+    const api = axios.create({
         baseURL: URL,
         withCredentials: true, //옵션
-        headers: { 'Content-Type': 'application/json' }, //옵션
+        headers: {'Content-Type': 'application/json'}, //옵션
     });
 
-    useEffect(()=>{
-        async function getData(){
-            try{
+    useEffect(() => {
+        async function getData() {
+            try {
                 const response =
                     await api(
                         {
                             method: "get",
                             url: `/${api_key}/json/culturalEventInfo/1/1000/${keyword.keyword}/ `,
-                            signal:AbortSignal.timeout(5000)
+                            signal: AbortSignal.timeout(5000)
                         }
                     )
                 const result = response.data
@@ -49,56 +48,55 @@ const Main = (keyword) => {
                     item => item.GUNAME === "종로구" && item.STRTDATE <= time && item.END_DATE >= time
                 );
                 setData(filteredData);
-            }
-            catch(e) {
+            } catch (e) {
                 alert('조금만 기다려주세요.')
                 console.log(e)
             }
         }
+
         getData()
-    },[time, keyword])
-
-
+    }, [time, keyword])
 
     const handlePageClick = (event) => {
         setCurrentPage(event.selected);
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.scrollTo({top: 0, behavior: "smooth"});
     };
 
     const offset = currentPage * itemsPerPage;
     const currentPageData = Array.isArray(data) ? data.slice(offset, offset + itemsPerPage) : [];
 
     const handleScroll = () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.scrollTo({top: 0, behavior: "smooth"});
     };
 
     return (<>
             <S.container>
                 {currentPageData ? <>
                         <S.list>
-                        {currentPageData.map((item,idx) => (
-                            <S.box key={item.TITLE}>
-                                <S.imgBox>
-                                    <S.img src={item.MAIN_IMG} alt="poster"/>
-                                </S.imgBox>
-                                <S.dataBox>
-                                    <S.title>{item.TITLE}</S.title>
-                                    <S.date>
-                                        <li>{item.DATE}</li>
-                                        <li>{item.IS_FREE}</li>
-                                    </S.date>
-                                    <S.place onClick={() => {
-                                        navigate(`/map/${item.LOT}/${item.LAT}`)
-                                    }}>{item.PLACE}</S.place>
-                                    <S.btnBox>
-                                        <S.bookMark><FavoriteIcon title={item.TITLE} item={item}/></S.bookMark>
-                                        <S.button><a href={item.ORG_LINK} target="_blank">예약하기 ></a></S.button>
-                                    </S.btnBox>
-                                </S.dataBox>
-                            </S.box>
-                        ))}
+                            {currentPageData.map((item, idx) => (
+                                <S.box key={item.TITLE}>
+                                    <S.imgBox>
+                                        <S.img src={item.MAIN_IMG} alt="poster"/>
+                                    </S.imgBox>
+                                    <S.dataBox>
+                                        <S.title>{item.TITLE}</S.title>
+                                        <S.date>
+                                            <li>{item.DATE}</li>
+                                            <li>{item.IS_FREE}</li>
+                                        </S.date>
+                                        <S.place onClick={() => {
+                                            navigate(`/map/${item.LOT}/${item.LAT}`)
+                                        }}>{item.PLACE}</S.place>
+                                        <S.btnBox>
+                                            <S.bookMark><FavoriteIcon title={item.TITLE} item={item}/></S.bookMark>
+                                            <S.button><a href={item.ORG_LINK} target="_blank">예약하기 ></a></S.button>
+                                        </S.btnBox>
+                                    </S.dataBox>
+                                </S.box>
+                            ))}
                         </S.list>
-                        {modal === true ? <DetailedPage keyword={keyword} selectedTitle={selectedTitle} setModal={setModal}/>:null}
+                        {modal === true ?
+                            <DetailedPage keyword={keyword} selectedTitle={selectedTitle} setModal={setModal}/> : null}
                         <S.paginationBox>
                             {data.length > 0 && (
                                 <ReactPaginate
@@ -113,11 +111,11 @@ const Main = (keyword) => {
                                     activeClassName={"active"}
                                 />
                             )}
-                        </S.paginationBox></>:
+                        </S.paginationBox></> :
                     <p>현재 진행중인 행사가 없습니다.</p>}
             </S.container>
-            <S.icon src={upIcon} alt="icon" onClick={handleScroll}/>
-    </>
+            {media.phone ? <S.icon src={upIcon} alt="icon" onClick={handleScroll}/> : null}
+        </>
 
 
     );
@@ -128,49 +126,43 @@ export default Main;
 const S = {};
 
 S.container = styled.div`
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 100%;
-    height: 100%;
     place-items: center;
+    align-items: center;
     cursor: pointer;
-    ${media.phone`
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-  `}
 `
 
 S.list = styled.div`
     display: grid;
-    grid-template-columns: 0.5fr 0.5fr 0.5fr ;
-    width: 90%;
+    grid-template-columns: 0.3fr 0.3fr 0.3fr;
     ${media.phone`
-        display: grid;
         grid-template-columns: 0.5fr ;
-        max-width: 90%;
   `}
 `
-S.box =styled.div`
+S.box = styled.div`
     width: 350px;
     height: 500px;
     margin: 10px;
-    li{
+
+    li {
         text-align: start;
         list-style: none;
         margin: 3px;
     }
-    border-top-left-radius:20px;
-    border-top-right-radius:20px;
+
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
     box-shadow: 1px 1px 5px #ccc;
 `
-S.dataBox =styled.div`
+S.dataBox = styled.div`
+    height: 250px;
     padding: 0 10px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
 `
 
 S.img = styled.img`
@@ -189,7 +181,7 @@ S.title = styled.p`
     font-weight: bold;
     word-break: normal;;
 `
-S.date =styled.div`
+S.date = styled.div`
     display: flex;
     justify-content: space-between;
 `
@@ -204,6 +196,7 @@ S.btnBox = styled.div`
     align-items: center;
     justify-content: space-between;
     margin-top: auto;
+    margin-bottom: 20px;
 `
 
 S.button = styled.button`
@@ -211,15 +204,19 @@ S.button = styled.button`
     height: 40px;
     background-color: lightgrey;
     border: none;
-    a{
+
+    a {
         text-decoration: none;
         color: black;
         font-weight: bold;
     }
+
     border-radius: 5px;
-    &:hover{
+
+    &:hover {
         background-color: #00A1E9;
-        a{
+
+        a {
             color: #FFF;
         }
     }
@@ -245,22 +242,26 @@ S.icon = styled.img`
 
 S.paginationBox = styled.div`
     display: flex;
-    justify-content: center; 
-    margin-top: 15px;
-  ul { 
-      display: flex;
-      list-style: none; 
-      padding: 0; }
-  ul.pagination li {
-    width: 40px;
-    height: 30px;
-    display: flex;
     justify-content: center;
-    align-items: center;
-    font-size: 1rem;
-    cursor: pointer;
-  }
+    margin-top: 15px;
+
+    ul {
+        display: flex;
+        list-style: none;
+        padding: 0;
+    }
+
+    ul.pagination li {
+        width: 40px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
     ${media.phone`
         max-width: 90%;
   `}
-  `
+`

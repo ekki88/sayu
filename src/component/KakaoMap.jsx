@@ -1,13 +1,14 @@
+// 카카오 지도 로직
 import React, {useEffect} from 'react';
 import {useParams} from "react-router-dom";
 import styled from "styled-components";
 
 const KakaoMap = (props) => {
     const {} = props;
-    const { lat, lng } = useParams();
-console.log("지도 확인 ",lat)
+    const {lat, lng} = useParams();
+
     useEffect(() => {
-        const { kakao } = window;
+        const {kakao} = window;
         const latitude = parseFloat(lat);
         const longitude = parseFloat(lng);
 
@@ -47,7 +48,7 @@ console.log("지도 확인 ",lat)
 
     return (
         <div>
-            <S.mapContainer  id="map" ></S.mapContainer>
+            <S.mapContainer id="map"></S.mapContainer>
         </div>
     );
 };
@@ -56,6 +57,6 @@ export default KakaoMap;
 const S = {};
 
 S.mapContainer = styled.div`
-  width: 100%;
-  height: 100vh;
+    width: 100%;
+    height: 100vh;
 `;
