@@ -15,14 +15,17 @@ https://sayu-in-sadaemoon.netlify.app
 ![피씨 북마크](https://github.com/ekki88/sayu/assets/96987560/7d7fd159-749e-4b60-a7db-8af0bba30f26)
 
 <h4>카카오 로그인</h4> 
-<span>- 카카오로그인 api를 이용하여 로그인 기능을 구현하였습니다. </span> <br/>
+<li>카카오 로그인 API를 활용하여 사용자 인증 및 로그인을 구현하였습니다.  </li> <br/>
 <h4>북마크 기능, 유지</h4> 
-<span>- recoil과 로컬 스토리지를 사용하여 유저별로 북마크, 북마크 유지 기능을 구현하였습니다.</span>
-
+<li>Recoil과 로컬 스토리지를 이용하여 사용자별 북마크 기능을 구현하였습니다.</li>
+<br/>
+<br/>
 <h3>📲 반응형 모바일 웹</h3>
 
 ![모바일 반응형](https://github.com/ekki88/sayu/assets/96987560/0aca51cf-cc9c-49f5-b811-763bfd90f499)
 
+<br/>
+<br/>
 <h3>⚒기술 스택</h3>
 <li>React</li>
 <li>Recoil</li>
