@@ -1,6 +1,6 @@
 [[redirects]]
 from = "/proxy/*"
-to = "https://sayu-0.netlify.app/:splat"
+to = "https://sayu-in-sadaemoon.netlify.app/ :splat"
 status = 200
 force = true
 
