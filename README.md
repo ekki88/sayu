@@ -31,4 +31,4 @@ https://sayu-in-sadaemoon.netlify.app
 <li>React</li>
 <li>Recoil</li>
 <li>Styled-component</li>
-<li>Netrify</li>
+<li>Netlify</li>
