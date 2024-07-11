@@ -14,8 +14,9 @@ https://sayu-in-sadaemoon.netlify.app
 
 ![피씨 북마크](https://github.com/ekki88/sayu/assets/96987560/7d7fd159-749e-4b60-a7db-8af0bba30f26)
 
-<h4>카카오 로그인</h4> 
+<h4>카카오 로그인, map</h4> 
 <li>카카오 로그인 API를 활용하여 사용자 인증 및 로그인을 구현하였습니다.  </li> <br/>
+<li>카카오 map Javscript api를 활용하여 주소 클릭시 상세지도가 보여지게끔 구현하였습니다.  </li> <br/>
 <h4>북마크 기능, 유지</h4> 
 <li>Recoil과 로컬 스토리지를 이용하여 사용자별 북마크 기능을 구현하였습니다.</li>
 <br/>
