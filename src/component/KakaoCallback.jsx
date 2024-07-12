@@ -2,10 +2,8 @@
 import React, {useEffect} from 'react';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-
-
-import {useRecoilState, useSetRecoilState} from 'recoil';
-import {FavoriteList, LoginState, UserIdState} from '../recoil/atom';
+import {useRecoilState} from 'recoil';
+import {LoginState, UserIdState} from '../recoil/atom';
 
 
 const KakaoCallback = () => {

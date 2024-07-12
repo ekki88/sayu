@@ -6,7 +6,7 @@ import Main from "./Main";
 import loginIcon from "../img/icons/kakao_login.png";
 import axios from "axios";
 import Bookmark from "./Bookmark";
-import {useRecoilState, useResetRecoilState, useSetRecoilState} from 'recoil';
+import {useRecoilState} from 'recoil';
 import {FavoriteList, LoginState, UserIdState} from '../recoil/atom';
 import {media} from "../styles/media";
 

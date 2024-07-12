@@ -1,6 +1,5 @@
 import React from 'react';
 import {atom} from 'recoil';
-import {recoilPersist} from 'recoil-persist';
 
 const localStorageEffect = (key) => ({setSelf, onSet}) => {
     const savedValue = localStorage.getItem(key);

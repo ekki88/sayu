@@ -3,8 +3,7 @@ import React, {useEffect} from 'react';
 import {useParams} from "react-router-dom";
 import styled from "styled-components";
 
-const KakaoMap = (props) => {
-    const {} = props;
+const KakaoMap = () => {
     const {lat, lng} = useParams();
 
     useEffect(() => {
@@ -26,6 +25,7 @@ const KakaoMap = (props) => {
         });
         marker.setMap(map);
 
+        // 좌표를 주소로 변경
         const geocoder = new kakao.maps.services.Geocoder();
         geocoder.coord2Address(longitude, latitude, (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
